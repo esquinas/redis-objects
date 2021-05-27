@@ -52,6 +52,12 @@ describe Redis::Value do
     @value.value.should == '42'
   end
 
+  it 'should respond to exists?' do
+    @value.exists?.should.be.false
+    @value.value = 'Trevor Hoffman'
+    @value.exists?.should.be.true
+  end
+
   it "should handle complex marshaled values" do
     @value.options[:marshal] = true
     @value.should == nil
@@ -673,15 +679,15 @@ describe Redis::Lock do
     lock = Redis::Lock.new(:test_lock, :expiration => 0.1)
 
     lock.lock do
-      REDIS_HANDLE.exists("test_lock").should.be.true
+      REDIS_HANDLE.exists?("test_lock").should.be.true
       sleep 0.3
       # technically undefined behavior because we don't have a BG thread
       # running and deleting lock keys - that is only triggered on block exit
-      #REDIS_HANDLE.exists("test_lock").should.be.false
+      #REDIS_HANDLE.exists?("test_lock").should.be.false
     end
 
     # lock value should not be set since the lock was held for more than the expiry
-    REDIS_HANDLE.exists("test_lock").should.be.false
+    REDIS_HANDLE.exists?("test_lock").should.be.false
   end
 
 
@@ -689,9 +695,9 @@ describe Redis::Lock do
     lock = Redis::Lock.new(:test_lock2, :expiration => 0.1)
 
     lock.lock do
-      REDIS_HANDLE.exists("test_lock2").should.be.true
+      REDIS_HANDLE.exists?("test_lock2").should.be.true
       sleep 0.3 # expired, key is deleted
-      REDIS_HANDLE.exists("test_lock2").should.be.false
+      REDIS_HANDLE.exists?("test_lock2").should.be.false
       REDIS_HANDLE.set("test_lock2", "foo") # this is no longer a lock key, name is a coincidence
     end
 
@@ -702,14 +708,14 @@ describe Redis::Lock do
     lock = Redis::Lock.new(:test_lock3, :expiration => 0.5)
 
     lock.lock do
-      REDIS_HANDLE.exists("test_lock3").should.be.true
+      REDIS_HANDLE.exists?("test_lock3").should.be.true
       sleep 0.1
-      REDIS_HANDLE.exists("test_lock3").should.be.true
+      REDIS_HANDLE.exists?("test_lock3").should.be.true
     end
 
     # should delete the key because the lock block is done, regardless of time
     # for some strange reason, I have seen this test fail randomly, which is worrisome.
-    #REDIS_HANDLE.exists("test_lock3").should.be.false
+    #REDIS_HANDLE.exists?("test_lock3").should.be.false
   end
 
 

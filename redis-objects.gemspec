@@ -1,4 +1,4 @@
-# coding: utf-8
+# frozen
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'redis/objects/version'
@@ -7,10 +7,10 @@ Gem::Specification.new do |spec|
   spec.name          = "redis-objects"
   spec.version       = Redis::Objects::VERSION
   spec.authors       = ["Nate Wiger"]
-  spec.email         = ["nwiger@gmail.com"]
+  spec.email         = ["nwiger@gmail.com", "esquinas.enrique@gmail.com"]
   spec.description   = %q{Map Redis types directly to Ruby objects. Works with any class or ORM.}
   spec.summary       = %q{Map Redis types directly to Ruby objects}
-  spec.homepage      = "http://github.com/nateware/redis-objects"
+  spec.homepage      = "http://github.com/esquinas/redis-objects"
   spec.license       = 'Artistic-2.0'
 
   spec.files         = `git ls-files`.split($/)
@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Only fix this one version or else tests break
-  spec.add_dependency "redis", "~> 4.2"
+  spec.add_dependency "redis", "~> 4.2.5"
 
   # Ignore gemspec warnings on these.  Trying to fix them to versions breaks TravisCI
   spec.add_development_dependency "bundler"
